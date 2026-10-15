@@ -1,6 +1,6 @@
 # Quiver Agent Skill
 
-A Claude Code skill that provides compiler-verified API signatures, conventions, and migration rules for projects using [Quiver](https://github.com/waynewbishop/quiver).
+This agent skill equips Claude Code with a verified reference of Quiver’s public API across releases 1.0.0 through 1.6.0. 
 
 <p>
     <img src="https://img.shields.io/badge/Quiver-1.0.0–1.6.0-2980b9.svg" alt="Covers Quiver 1.0.0 through 1.6.0." />
@@ -10,9 +10,7 @@ A Claude Code skill that provides compiler-verified API signatures, conventions,
 
 ## Overview
 
-The Quiver Agent Skill equips Claude Code with a verified reference of Quiver’s public API across releases 1.0.0 through 1.6.0. 
-
-Quiver is a pure Swift framework for statistics, linear algebra, and machine learning. It extends the standard Array type, so every operation reads as ordinary Swift code. With zero external dependencies, it covers the entire data workflow including analysis, transformation, and modeling in readable code that runs identically on iOS, macOS, watchOS, tvOS, visionOS, and the server.
+[Quiver](https://github.com/waynewbishop/quiver) is a pure Swift framework for statistics, linear algebra, and machine learning. It extends the standard Array type, so every operation reads as ordinary Swift code. With zero external dependencies, it covers the entire data workflow including analysis, transformation, and modeling in readable code that runs identically on iOS, macOS, watchOS, tvOS, visionOS, and the server.
 
 By anchoring Claude to the project’s resolved Quiver version, the skill ensures generated code adheres to Quiver’s exact type signatures, safe optional handling, and architectural conventions from the first prompt.
 
