@@ -46,16 +46,18 @@ When we ask Claude to review an existing project or prepare for an upgrade, the 
 
 ### Claude Code
 
-Install the skill from the marketplace:
+Add the marketplace, then install the skill from it:
 
 ```bash
-/plugin install quiver --marketplace waynewbishop/quiver-agent-skill
+/plugin marketplace add waynewbishop/quiver-agent-skill
+/plugin install quiver@quiver-agent-skill
 ```
 
-To enable the skill for all team members on a project, install it with project scope and commit the resulting `.claude/settings.json`:
+To enable the skill for all team members on a project, add the marketplace and install the plugin with project scope, then commit the resulting `.claude/settings.json`:
 
 ```bash
 claude plugin marketplace add waynewbishop/quiver-agent-skill --scope project
+claude plugin install quiver@quiver-agent-skill --scope project
 ```
 
 ### Other Coding Agents (Agent Skills standard)
@@ -95,10 +97,10 @@ To regenerate reference files against a local checkout of Quiver:
 swift scripts/generate-reference.swift
 ```
 
-To run the eval suite:
+To run the eval suite from the repository root:
 
 ```bash
-claude plugin eval quiver
+claude plugin eval ./quiver
 ```
 
 ## License
