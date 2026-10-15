@@ -1,0 +1,14 @@
+{
+  "name": "quiver",
+  "displayName": "Quiver",
+  "version": "0.1.0",
+  "description": "Writes and reviews Swift code that uses Quiver, the Swift library for statistics, linear algebra, and machine learning.",
+  "author": {
+    "name": "Wayne Bishop",
+    "url": "https://github.com/waynewbishop"
+  },
+  "homepage": "https://github.com/waynewbishop/quiver-agent-skill",
+  "repository": "https://github.com/waynewbishop/quiver-agent-skill",
+  "license": "Apache-2.0",
+  "keywords": ["swift", "quiver", "statistics", "linear-algebra", "machine-learning"]
+}

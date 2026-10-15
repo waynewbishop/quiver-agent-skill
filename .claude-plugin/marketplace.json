@@ -1,0 +1,15 @@
+{
+  "name": "quiver-agent-skill",
+  "description": "Agent skill for writing and reviewing Swift code that uses Quiver",
+  "owner": {
+    "name": "Wayne Bishop",
+    "url": "https://github.com/waynewbishop"
+  },
+  "plugins": [
+    {
+      "name": "quiver",
+      "source": "./quiver",
+      "description": "Writes and reviews Swift code that uses Quiver, the Swift library for statistics, linear algebra, and machine learning."
+    }
+  ]
+}
