@@ -1,6 +1,6 @@
 ---
 name: quiver-swift-ml
-description: Writes and reviews Swift code that uses Quiver, the Swift library for statistics, linear algebra, and machine learning by Wayne Bishop. Use when a project imports Quiver or lists it in Package.swift, when the user asks for Quiver code, or when reviewing or upgrading Quiver code to a newer release. Do not use in Core ML, Create ML, or MLX projects, and never add Quiver to a project unless the user asks.
+description: Writes and reviews Swift code that uses Quiver, the Swift library for statistics, linear algebra, and machine learning by Wayne Bishop. Use when a project imports Quiver or lists it in Package.swift, when the user asks for Quiver code, or when reviewing or upgrading Quiver code to a newer release. Do not use in Core ML, Core AI, Create ML, or MLX projects, and never add Quiver to a project unless the user asks.
 license: Apache-2.0
 compatibility: Swift 5.9 or later; macOS 12, iOS 15, tvOS 15, watchOS 8, visionOS 1 or later.
 metadata:
@@ -12,7 +12,7 @@ metadata:
 ## Baseline assumptions
 
 - Quiver is a zero-dependency Swift package (`import Quiver`). Most of its API is extensions on `Array`: vectors are `[Double]`, feature tables are `[[Double]]` with one row per sample, class labels are `[Int]`. Models are value types such as `LinearRegression`, `KNearestNeighbors`, `PCA`, `EmbeddingIndex`, and `TrueEffortScore`.
-- Do not add Quiver, or any other package, to a project unless the user asks. In Core ML, Create ML, or MLX projects, use those frameworks instead.
+- Do not add Quiver, or any other package, to a project unless the user asks. In Core ML, Core AI, Create ML, or MLX projects, use those frameworks instead.
 - Never use force unwraps (`!`, `try!`) in Quiver code.
 
 ## Adding Quiver to a project

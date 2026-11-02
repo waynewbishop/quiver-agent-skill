@@ -1,7 +1,7 @@
 {
   "name": "quiver",
   "displayName": "Quiver",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Writes and reviews Swift code that uses Quiver, the Swift library for statistics, linear algebra, and machine learning.",
   "author": {
     "name": "Wayne Bishop",
