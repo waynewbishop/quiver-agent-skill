@@ -72,10 +72,12 @@ In any repository containing a Quiver dependency, Claude loads the skill automat
 
 > "Check this target for any deprecated Quiver calls before we upgrade to 1.6.0."
 
-To invoke the skill directly or restrict Claude's focus:
+To invoke the skill directly or restrict Claude's focus, use the plugin-namespaced command in Claude Code:
 
-- `/quiver-swift-ml Review our statistics extensions for optional safety`
-- `/quiver-swift-ml Check for breaking changes since 1.2.0`
+- `/quiver:quiver-swift-ml Review our statistics extensions for optional safety`
+- `/quiver:quiver-swift-ml Check for breaking changes since 1.2.0`
+
+With a standalone Agent Skills install (`npx skills add`), the command is unnamespaced: `/quiver-swift-ml`.
 
 The skill activates only when working with Quiver and will never modify your `Package.swift` without explicit confirmation.
 

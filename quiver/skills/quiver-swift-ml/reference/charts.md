@@ -14,7 +14,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 - `func percentChange(lag: Int = 1) -> [Element]` — Calculates the percentage change between each element and the element a fixed number of periods before it. Returns: Array of percentage changes with length equal to `count - lag`
 - `func histogram(bins: Int) -> [(midpoint: Element, count: Int)] where Element : BinaryFloatingPoint` — Divides data into evenly spaced bins and counts the frequency of values in each. Returns: Array of tuples containing the midpoint and count for each bin
 - `func histogram(rule: BinRule) -> [(midpoint: Element, count: Int)] where Element : BinaryFloatingPoint` — Divides data into evenly spaced bins using a named bin-selection rule. Returns: Array of tuples containing the midpoint and count for each bin. *(since 1.2.5)*
-- `func quartiles() -> Quartiles<Element>? where Element : BinaryFloatingPoint, Element : Sendable` — Calculates the five-number summary and interquartile range of the data. Returns: A `Quartiles` value containing the five-number summary and IQR, or nil if the array is empty.
+- `func quartiles() -> Quartiles<Element>? where Element : BinaryFloatingPoint, Element : Sendable` — Calculates the five-number summary and interquartile range of the data. Returns: A `Quartiles` value containing the five-number summary and IQR, or nil if the array is empty. *(this exact signature since 1.2.0)*
 - `func percentile(_ p: Double) -> Element? where Element : BinaryFloatingPoint` — Calculates the value at a specific percentile using linear interpolation. Returns: The interpolated value at the given percentile, or nil if the array is empty or `p` is outside the valid range
 - `func percentileRank(of value: Element) -> Element` — Calculates the percentile rank of a specific value within the array. Returns: The percentile rank between 0 and 100
 - `func percentileRanks() -> [Element]` — Calculates the percentile rank for every value in the array. Returns: Array of percentile ranks (0-100) corresponding to each element
@@ -29,7 +29,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 - `func stackedCumulative() -> [[Double]]` — Stacks multiple data series cumulatively so each series builds on the one below it. Returns: Array of arrays where each series is the cumulative sum of all preceding series
 - `func stackedPercentage() -> [[Double]]` — Converts multiple data series into percentage-based stacking where each time point sums to 100%. Returns: Array of arrays where each value is the percentage contribution at that index
-- `func correlationMatrix() -> [[Double]]` — Calculates the Pearson correlation matrix for multiple data series. Returns: A 2D array of Pearson correlation coefficients between all series pairs
+- `func correlationMatrix() -> [[Double]]` — Calculates the Pearson correlation matrix for multiple data series. Returns: A 2D array of Pearson correlation coefficients between all series pairs Note: The rows of the input are series, one per variable. This is the opposite orientation from `covarianceMatrix()`, whose rows are samples. Feeding a samples-as-rows design matrix to this method produces an n × n matrix where p × p was intended.
 - `func heatmapData(labels: [String]) -> [(x: String, y: String, value: Double)]` — Computes a correlation matrix and flattens it into labeled tuples for heatmap rendering. Returns: Array of `(x, y, value)` tuples suitable for heatmap visualization
 
 ## AggregationMethod

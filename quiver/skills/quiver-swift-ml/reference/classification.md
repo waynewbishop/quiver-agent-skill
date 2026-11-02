@@ -9,7 +9,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 `protocol Classifier` — A protocol for supervised classification models that predict discrete class labels.
 
 - `func predict(_ features: [[Double]]) -> [Int]` — Predicts class labels for the given feature vectors. Returns: An array of predicted class labels, one per sample.
-- `func predict(_ value: Double) -> Int` — Predicts a single class label from one single-feature sample. Returns: The predicted class label.
+- `func predict(_ value: Double) -> Int` — Predicts a single class label from one single-feature sample. Returns: The predicted class label. *(this exact signature since 1.4.0)*
 - `func classify(_ features: [[Double]]) -> [Classification]` — Groups input features by their predicted class label. Returns: An array of `Classification` groups, one per unique predicted label, sorted by label.
 
 ## LogisticRegression.Outcome
@@ -77,7 +77,7 @@ Conforms to: Codable, Equatable.
 - `case cosine` — Cosine distance: 1 − cosine similarity.
 - `case manhattan` — Manhattan distance: Σ|aᵢ − bᵢ|. *(since 1.6.0)*
 - `case chebyshev` — Chebyshev distance: max|aᵢ − bᵢ|. *(since 1.6.0)*
-- `case squaredEuclidean` — Squared Euclidean distance: Σ(aᵢ − bᵢ)². *(since 1.6.0)*
+- `case squaredEuclidean` — Squared Euclidean distance: Σ(aᵢ − bᵢ)². Note: This is not a true distance metric — it does not satisfy the triangle inequality, and its values are on a squared scale, so they should not be read as straight-line distances or compared across differently scaled feature sets. *(since 1.6.0)*
 - `case minkowski(p: Double)` — Minkowski distance: (Σ|aᵢ − bᵢ|ᵖ)^(1/p). *(since 1.6.0)*
 
 ## GaussianNaiveBayes
@@ -91,7 +91,7 @@ Conforms to: Classifier, Codable, Equatable.
 - `static func fit(features: [[Double]], labels: [Int]) -> GaussianNaiveBayes` — Fits a Gaussian Naive Bayes model to the given training data. Returns: A trained `GaussianNaiveBayes` model.
 - `func predict(_ features: [[Double]]) -> [Int]` — Predicts class labels for one or more samples. Returns: An array of predicted class labels, one per sample.
 - `func predictLogProbabilities(_ features: [[Double]]) -> [[Double]]` — Returns log-probabilities for each class for each sample. Returns: 2D array of log-probabilities, shape [samples × classes].
-- `func predictProbabilities(_ features: [[Double]]) -> [[Double]]` — Returns calibrated class probabilities for each sample. Returns: 2D array of class probabilities, shape [samples × classes]. Each row sums to 1.0. *(since 1.1.0)*
+- `func predictProbabilities(_ features: [[Double]]) -> [[Double]]` — Returns normalized posterior class probability estimates for each sample. Normalization does not make the values calibrated; Naive Bayes is often overconfident. Returns: 2D array of class probabilities, shape [samples × classes]. Each row sums to 1.0. Note: Quiver applies a flat variance floor of `1e-9` during fitting, which makes the returned probabilities more conservative than other implementations that scale their smoothing relative to the maximum observed variance. The argmax and rank order across classes are unaffected — only the absolute confidence values differ at extreme class separation. *(since 1.1.0)*
 
 ## GaussianNaiveBayes.ClassStats
 
@@ -123,13 +123,13 @@ Conforms to: Codable, Equatable, Sequence.
 - `func precision(actual: [Int], positiveLabel: Int = 1) -> Double?` — Of all predicted positives, what fraction were correct: TP / (TP + FP). Returns: Precision as a value between 0 and 1, or `nil` if undefined.
 - `func recall(actual: [Int], positiveLabel: Int = 1) -> Double?` — Of all actual positives, what fraction did the model catch: TP / (TP + FN). Returns: Recall as a value between 0 and 1, or `nil` if undefined.
 - `func f1Score(actual: [Int], positiveLabel: Int = 1) -> Double?` — Harmonic mean of precision and recall: 2 * P * R / (P + R). Returns: F1 score as a value between 0 and 1, or `nil` if undefined.
-- `func classificationReport(actual: [Int]) -> ClassificationReport` — Returns a formatted per-class classification report comparing these predictions against actual labels. Returns: A `ClassificationReport` with per-class metrics, accuracy, and macro/weighted averages.
+- `func classificationReport(actual: [Int]) -> ClassificationReport` — Returns a formatted per-class classification report comparing these predictions against actual labels. Returns: A `ClassificationReport` with per-class metrics, accuracy, and macro/weighted averages. *(this exact signature since 1.2.0)*
 - `func classDistribution() -> [Int : Int]` — Returns the number of samples per class as a dictionary. Returns: A dictionary mapping each unique label to its sample count. Returns an empty dictionary if the array is empty.
 - `func imbalanceRatio() -> Double?` — Returns the ratio of the largest class to the smallest class. Returns: The ratio of the largest class count to the smallest, or `nil` if the array is empty or contains fewer than two classes.
 
 ## Array extensions where Element == Double
 
-- `func rSquared(actual: [Double]) -> Double` — Coefficient of determination R² comparing these predicted values against actuals. Returns: R² as a value between 0 and 1 (can be negative for very poor models).
+- `func rSquared(actual: [Double]) -> Double` — Coefficient of determination R² comparing these predicted values against actuals. Returns: R², at most 1. It is negative when the model fits worse than predicting the mean, and it has no lower bound.
 - `func meanSquaredError(actual: [Double]) -> Double` — Mean squared error comparing these predicted values against actuals. Returns: The mean squared error (always non-negative).
 - `func rootMeanSquaredError(actual: [Double]) -> Double` — Root mean squared error comparing these predicted values against actuals. Returns: The root mean squared error (always non-negative).
 

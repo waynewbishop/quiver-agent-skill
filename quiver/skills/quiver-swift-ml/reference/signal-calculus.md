@@ -6,15 +6,15 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 ## Array extensions where Element == Double
 
-- `func fourierMagnitude() -> [Double]` — Returns the amplitude at each frequency bin. Returns: Amplitude values in the same order as `fourierFrequencies(sampleRate:)`. *(since 1.1.0)*
-- `func fourierMagnitudeHalf() -> [Double]` — Returns the amplitude spectrum for only the positive-frequency half. *(since 1.1.0)*
-- `func fourierPhase() -> [Double]` — Returns the phase angle (in radians) at each frequency bin. Returns: Phase angles in radians in the range (−π, π]. *(since 1.1.0)*
+- `func fourierMagnitude() -> [Double]` — Returns the amplitude at each frequency bin. Returns: Amplitude values in the same order as `fourierFrequencies(sampleRate:)`. Precondition: `count` must be a power of 2. Use `padded(toPowerOfTwo:)` first if the signal length is not already a power of 2. *(since 1.1.0)*
+- `func fourierMagnitudeHalf() -> [Double]` — Returns the amplitude spectrum for only the positive-frequency half. Precondition: `count` must be a power of 2. *(since 1.1.0)*
+- `func fourierPhase() -> [Double]` — Returns the phase angle (in radians) at each frequency bin. Returns: Phase angles in radians in the range (−π, π]. Precondition: `count` must be a power of 2. *(since 1.1.0)*
 - `func fourierFrequencies(sampleRate: Double) -> [Double]` — Maps each output bin to its corresponding frequency in Hz. *(since 1.1.0)*
 - `func fourierFrequenciesHalf(sampleRate: Double) -> [Double]` — Returns only the positive-frequency half of the frequency axis. *(since 1.1.0)*
-- `func fourierInverse() -> [Double]` — Performs an inverse Fourier transform on real-valued input. *(since 1.1.0)*
+- `func fourierInverse() -> [Double]` — Performs an inverse Fourier transform on real-valued input. Precondition: `count` must be a power of 2. *(since 1.1.0)*
 - `func hannWindowed() -> [Double]` — Applies a Hann window to reduce spectral leakage before computing the Fourier transform. Returns: A new array of the same length with the Hann window applied. *(since 1.1.0)*
 - `func padded(toPowerOfTwo value: Double = 0.0) -> [Double]` — Zero-pads the signal to the next power of two, satisfying the Fourier transform's input requirement. *(since 1.1.0)*
-- `func fourierDominantFrequency(sampleRate: Double) -> Double?` — Returns the frequency with the highest amplitude in the spectrum, excluding the DC component (0 Hz). Returns: The frequency in Hz of the strongest non-DC component, or `nil` if the signal is empty or has fewer than 2 samples. *(since 1.1.0)*
+- `func fourierDominantFrequency(sampleRate: Double) -> Double?` — Returns the frequency with the highest amplitude in the spectrum, excluding the DC component (0 Hz). Returns: The frequency in Hz of the strongest non-DC component, or `nil` if the signal is empty or has fewer than 2 samples. Precondition: `count` must be a power of 2. *(since 1.1.0)*
 - `func fourierDominantFrequency(sampleRate: Double, windowed: Bool) -> Double?` — Returns the dominant frequency with automatic padding and optional windowing. Returns: The frequency in Hz of the strongest component, or `nil` if the signal is empty. *(since 1.1.0)*
 - `func fourierSpectrum(sampleRate: Double, windowed: Bool = false) -> [(frequency: Double, magnitude: Double)]` — Returns the positive-frequency spectrum as paired frequency and magnitude values, with automatic padding and optional windowing. Returns: An array of `(frequency: Double, magnitude: Double)` tuples covering the positive-frequency half of the spectrum. *(since 1.1.0)*
 - `func powerSpectralDensity(sampleRate: Double, windowed: Bool = false) -> PowerSpectrum?` — Returns the one-sided power spectral density of the signal as a `PowerSpectrum` value pairing frequencies and densities together. Returns: A `PowerSpectrum` carrying the frequency axis, the density at each bin, and the source sample rate. Returns `nil` if the input has fewer than two samples. *(since 1.2.5)*

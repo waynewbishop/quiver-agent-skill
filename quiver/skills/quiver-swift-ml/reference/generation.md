@@ -61,7 +61,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 ## SeededRandomNumberGenerator
 
-`struct SeededRandomNumberGenerator` — A deterministic random number generator that produces the same sequence for a given seed. *(since 1.2.0)*
+`struct SeededRandomNumberGenerator` — A deterministic random number generator that produces the same sequence for a given seed. Note: The xorshift64 algorithm is suitable for simulations, teaching, and reproducible examples. It is **not** a cryptographic generator. For security-sensitive randomness, use Swift's `SystemRandomNumberGenerator`. *(since 1.2.0)*
 
 Conforms to: RandomNumberGenerator.
 

@@ -22,13 +22,13 @@ Conforms to: Equatable.
 - `func filtered(where mask: [Bool]) -> Panel` — Returns a new panel containing only the rows where the mask is true. Returns: A new `Panel` with the filtered rows.
 - `func trainTestSplit(testRatio: Double, seed: UInt64) -> (train: Panel, test: Panel)` — Splits the panel into training and testing subsets by rows. Returns: A named tuple of `(train: Panel, test: Panel)`.
 - `func head(n: Int = 10) -> String` — Returns the first rows of the panel as a formatted table. Returns: A formatted string showing the first `n` rows in tabular form.
-- `func summary() -> PanelSummary` — Returns a typed snapshot of per-column descriptive statistics.
+- `func summary() -> PanelSummary` — Returns a typed snapshot of per-column descriptive statistics. *(this exact signature since 1.2.0)*
 - `func describe() -> PanelSummary` — Returns a typed snapshot of per-column descriptive statistics. *(since 1.2.0)*
 - `func tail(n: Int = 10) -> String` — Returns the last `n` rows of the panel as a formatted string. Returns: A formatted string showing the last `n` rows in tabular form. *(since 1.2.0)*
 - `func unique(column: String) -> [Double]?` — Returns the unique values in a column, sorted ascending. Returns: The unique values in ascending order, or `nil` if the column does not exist. *(since 1.2.0)*
 - `func valueCounts(column: String) -> [(value: Double, count: Int)]?` — Returns the frequency of each unique value in a column. Returns: An array of `(value, count)` pairs sorted by count descending, or `nil` if the column does not exist. *(since 1.2.0)*
-- `func sortedBy(column: String, ascending: Bool = true) -> Panel` — Returns a new Panel sorted by the values in one column. Returns: A new Panel with rows reordered by the sort column. *(since 1.2.0)*
-- `func standardized(column: String) -> Panel` — Returns a new Panel with one column standardized to z-scores. Returns: A new Panel with the named column replaced by its z-scored values. *(since 1.2.0)*
+- `func sortedBy(column: String, ascending: Bool = true) -> Panel` — Returns a new Panel sorted by the values in one column. Returns: A new Panel with rows reordered by the sort column. Note: Calling this method with a column name that does not exist triggers a `preconditionFailure`, matching the behavior of the subscript accessor. *(since 1.2.0)*
+- `func standardized(column: String) -> Panel` — Returns a new Panel with one column standardized to z-scores. Returns: A new Panel with the named column replaced by its z-scored values. Note: A constant column (zero standard deviation) returns a column of zeros for that column, matching the array-level method. *(since 1.2.0)*
 - `func correlationMatrix() -> (columns: [String], matrix: [[Double]])` — Returns the pairwise Pearson correlation matrix with column labels. Returns: A named tuple of `(columns, matrix)`. The `columns` array matches the order of rows and columns in `matrix`. *(since 1.2.0)*
 
 ## Array extensions where Element == Double

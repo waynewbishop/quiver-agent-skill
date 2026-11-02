@@ -20,14 +20,38 @@ Conforms to: Codable, Equatable.
 - `let reducer: PCA?` — The optional dimensionality-reduction stage applied after scaling. *(since 1.6.0)*
 - `let model: Model` — The trained model that produces predictions from transformed features. *(since 1.1.0)*
 - `init(scaler: StandardScaler, reducer: PCA? = nil, model: Model)` — Creates a pipeline from a fitted scaler, an optional reducer, and a trained model. *(since 1.6.0)*
+
+## Pipeline where Model: Classifier
+
 - `func predict(_ features: [[Double]]) -> [Int]` — Scales raw features, applies the reducer when present, and predicts class labels in one call. Returns: Predicted class labels, one per sample. *(since 1.1.0)*
+
+## Pipeline where Model: Regressor
+
 - `func predict(_ features: [[Double]]) -> [Double]` — Scales raw features, applies the reducer when present, and predicts continuous values in one call. Returns: Predicted values, one per sample. *(since 1.1.0)*
+
+## Pipeline where Model == KNearestNeighbors
+
 - `static func fit(features: [[Double]], labels: [Int], k: Int = 3, metric: DistanceMetric = .euclidean, weight: VoteWeight = .uniform) -> Pipeline<KNearestNeighbors>` — Fits a scaler, trains a K-Nearest Neighbors classifier, and bundles them into a Pipeline. Returns: An immutable `Pipeline<KNearestNeighbors>`. *(since 1.1.0)*
 - `static func fit(features: [[Double]], labels: [Int], componentCount: Int, k: Int = 3, metric: DistanceMetric = .euclidean, weight: VoteWeight = .uniform) -> Pipeline<KNearestNeighbors>` — Fits a scaler, projects the scaled features onto principal components, trains a K-Nearest Neighbors classifier on the projection, and bundles all three into a Pipeline. Returns: An immutable `Pipeline<KNearestNeighbors>` carrying the scaler, the fitted reducer, and the trained classifier. *(since 1.6.0)*
+
+## Pipeline where Model == GaussianNaiveBayes
+
 - `static func fit(features: [[Double]], labels: [Int]) -> Pipeline<GaussianNaiveBayes>` — Fits a scaler, trains a Gaussian Naive Bayes classifier, and bundles them into a Pipeline. Returns: An immutable `Pipeline<GaussianNaiveBayes>`. *(since 1.1.0)*
+
+## Pipeline where Model == KMeans
+
 - `static func fit(data: [[Double]], k: Int, maxIterations: Int = 100, seed: UInt64? = nil) -> Pipeline<KMeans>` — Fits a scaler, trains a K-Means clustering model, and bundles them into a Pipeline. Returns: An immutable `Pipeline<KMeans>`. *(since 1.1.0)*
+
+## Pipeline where Model == LinearRegression
+
 - `static func fit(features: [[Double]], targets: [Double], intercept: Bool = true) throws -> Pipeline<LinearRegression>` — Fits a scaler, trains a Linear Regression model, and bundles them into a Pipeline. Returns: An immutable `Pipeline<LinearRegression>`. Throws: `MatrixError.singular` if features are linearly dependent. *(since 1.1.0)*
+
+## Pipeline where Model == GradientDescent
+
 - `static func fit(features: [[Double]], targets: [Double], learningRate: Double = 0.01, maxIterations: Int = 1000, tolerance: Double = 1.0e-6, intercept: Bool = true) throws -> Pipeline<GradientDescent>` — Fits a scaler, trains a gradient descent regressor, and bundles them into a Pipeline. Returns: An immutable `Pipeline<GradientDescent>`. Throws: `GradientDescentError` on divergence. *(since 1.4.0)*
+
+## Pipeline where Model == LogisticRegression
+
 - `static func fit(features: [[Double]], labels: [Int], learningRate: Double = 0.01, maxIterations: Int = 1000, tolerance: Double = 1.0e-6, intercept: Bool = true) throws -> Pipeline<LogisticRegression>` — Fits a scaler, trains a logistic regression classifier, and bundles them into a Pipeline. Returns: An immutable `Pipeline<LogisticRegression>`. Throws: `GradientDescentError` on divergence. *(since 1.4.0)*
 
 ## StandardScaler
@@ -68,7 +92,7 @@ Conforms to: Codable, Equatable.
 - `let featureCount: Int` — Number of features the model was trained on.
 - `static func fit(data: [[Double]], k: Int, maxIterations: Int = 100, seed: UInt64? = nil) -> KMeans` — Fits a K-Means model to the given data. Returns: A trained `KMeans` model with final centroids and cluster assignments.
 - `static func bestFit(data: [[Double]], k: Int, maxIterations: Int = 100, attempts: Int = 10) -> KMeans` — Fits multiple K-Means models with different seeds and returns the best one. Returns: The `KMeans` model with the lowest inertia across all attempts.
-- `static func elbowMethod(data: [[Double]], kRange: ClosedRange<Int>, maxIterations: Int = 100, seed: UInt64? = nil) -> [(k: Int, inertia: Double)]` — Computes inertia for a range of k values (elbow method). Returns: An array of (k, inertia) tuples, one per k value.
+- `static func elbowMethod(data: [[Double]], kRange: ClosedRange<Int>, maxIterations: Int = 100, seed: UInt64? = nil) -> [(k: Int, inertia: Double)]` — Computes inertia for a range of k values (elbow method). Returns: An array of (k, inertia) tuples, one per k value. *(this exact signature since 1.1.0)*
 - `func clusters(from data: [[Double]]) -> [Cluster]` — Groups the original training data into clusters with their centroids. Returns: An array of `Cluster` values, one per centroid, in centroid order.
 - `func predict(_ data: [[Double]]) -> [Int]` — Assigns cluster labels to new data points based on the trained centroids. Returns: An array of cluster labels (0 to k-1), one per sample.
 

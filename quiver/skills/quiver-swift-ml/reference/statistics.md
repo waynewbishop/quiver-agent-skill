@@ -20,13 +20,13 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 - `func mean() -> Element?` — Returns the arithmetic mean (average) of all elements in the array. Returns: The arithmetic mean, or nil if the array is empty
 - `func median() -> Element?` — Returns the median (middle value) of the array. Returns: The median value, or nil if the array is empty
-- `func variance(ddof: Int = 1) -> Element?` — Returns the variance of all elements in the array. Returns: The variance, or nil if the array has fewer elements than `ddof + 1`
+- `func variance(ddof: Int = 1) -> Element?` — Returns the variance of all elements in the array. Returns: The variance, or nil if the array has fewer elements than `ddof + 1` *(this exact signature since 1.2.0)*
 - `func standardDeviation(ddof: Int = 1) -> Element?` — Returns the standard deviation of all elements in the array. Returns: The standard deviation, or nil if the array has fewer elements than `ddof + 1` *(since 1.2.0)*
 - `func standardError(ddof: Int = 1) -> Element?` — Returns the standard error of the mean for the elements in the array. Returns: The standard error, or nil if the array has fewer elements than `ddof + 1` *(since 1.2.0)*
 - `func zScore(of value: Element, ddof: Int = 1) -> Element?` — Standardizes a single value against this array's mean and standard deviation, returning how many standard deviations the value sits from the mean: `(value - mean) / standardDeviation`. Returns: The z-score of `value`, or nil if the array is empty, has fewer elements than `ddof + 1`, or has zero standard deviation (no spread to measure against). *(since 1.5.0)*
 - `func skewness(bias: Bool = true) -> Element?` — Returns the sample skewness of the array — a single number describing how lopsided the distribution is. Returns: The skewness, or nil if the array has fewer than 3 elements, the standard deviation is zero, or any element is not finite. *(since 1.2.5)*
 - `func kurtosis(bias: Bool = true) -> Element?` — Returns the sample excess kurtosis of the array — a single number describing how heavy the tails of the distribution are relative to a normal. Returns: The excess kurtosis (normal distribution has value 0), or nil if the array has fewer than 4 elements, the standard deviation is zero, or any element is not finite. *(since 1.2.5)*
-- `func outlierMask(threshold: Element = Element(2), mean: Element? = nil, standardDeviation: Element? = nil) -> [Bool]` — Detects outliers using the z-score method and returns a boolean mask. Returns: Boolean mask where `true` indicates the element at that index is an outlier *(since 1.2.0)*
+- `func outlierMask(threshold: Element = Element(2), mean: Element? = nil, standardDeviation: Element? = nil) -> [Bool]` — Detects outliers using the z-score method and returns a boolean mask. Returns: Boolean mask where `true` indicates the element at that index is an outlier *(since 1.2.0; this exact signature since 1.6.0)*
 
 ## Array extensions where Element == Double
 

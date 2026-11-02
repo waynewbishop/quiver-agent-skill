@@ -53,7 +53,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 - `func distance(to other: [Element]) -> Element` — Calculates the Euclidean distance between two points or vectors. Returns: The Euclidean distance between the two vectors
 - `func distance(to other: [Element], metric: DistanceMetric) -> Element` — Calculates the distance between two vectors using the given metric. Returns: The distance between the two vectors under the chosen metric *(since 1.6.0)*
 - `func cosineOfAngle(with other: [Element]) -> Element` — Returns the cosine of the angle between two vectors. Returns: The cosine of the angle between the two vectors, in the range [-1, 1]
-- `func correlation(with other: [Element]) -> Element?` — Returns the Pearson correlation coefficient between two vectors. Returns: The Pearson correlation coefficient, in the range [-1, 1], or `nil` if the result is undefined *(since 1.2.0)*
+- `func correlation(with other: [Element]) -> Element?` — Returns the Pearson correlation coefficient between two vectors. Returns: The Pearson correlation coefficient, in the range [-1, 1], or `nil` if the result is undefined *(since 1.2.0; this exact signature since 1.2.5)*
 - `func scalarProjection(onto vector: [Element]) -> Element` — Calculates the scalar projection of this vector onto another vector. Returns: The scalar length of the projection along the target vector's direction
 - `func vectorProjection(onto vector: [Element]) -> [Element]` — Calculates the vector projection of this vector onto another vector. Returns: A new vector pointing in the direction of the target with the projected magnitude
 - `func orthogonalComponent(to vector: [Element]) -> [Element]` — Returns the component of this vector that is perpendicular to another vector. Returns: A new vector perpendicular to the reference vector
@@ -62,8 +62,8 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 ## Array extensions where Element == Double
 
 - `func distance(to other: [Double], metric: DistanceMetric) -> Double` — Measures the distance between two `[Double]` vectors under the chosen metric. Returns: The distance between the two vectors under the chosen metric. *(since 1.6.0)*
-- `func topIndices(k: Int) -> [(rank: Int, index: Int, score: Double)]` — Returns the indices and values of the top K highest elements. Returns: Array of tuples containing rank (1-based), index, and score, sorted by score (highest first)
-- `func topIndices<T>(k: Int, labels: [T]) -> [(rank: Int, label: T, score: Double)]` — Returns the top K highest scores with corresponding labels. Returns: Array of tuples containing rank (1-based), label, and score, sorted by score (highest first)
+- `func topIndices(k: Int) -> [(rank: Int, index: Int, score: Double)]` — Returns the indices and values of the top K highest elements. Returns: Array of tuples containing rank (1-based), index, and score, sorted by score (highest first) *(this exact signature since 1.0.1)*
+- `func topIndices<T>(k: Int, labels: [T]) -> [(rank: Int, label: T, score: Double)]` — Returns the top K highest scores with corresponding labels. Returns: Array of tuples containing rank (1-based), label, and score, sorted by score (highest first) *(this exact signature since 1.0.1)*
 - `func sortedIndices() -> [Int]` — Returns the indices that would sort the array in ascending order. Returns: Array of indices representing the sorted order
 - `func angle(with other: [Double]) -> Double` — Returns the angle between two vectors in radians. Returns: The angle in radians, in the range [0, π]
 - `func angleInDegrees(with other: [Double]) -> Double` — Returns the angle between two vectors in degrees. Returns: The angle in degrees, in the range [0, 180]

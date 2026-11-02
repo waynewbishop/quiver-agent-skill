@@ -9,7 +9,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 `protocol Regressor` — A protocol for supervised regression models that predict continuous values. *(since 1.1.0)*
 
 - `func predict(_ features: [[Double]]) -> [Double]` — Predicts continuous target values for the given feature vectors. Returns: An array of predicted values, one per sample. *(since 1.1.0)*
-- `func predict(_ value: Double) -> Double` — Predicts a single target value from one single-feature sample. Returns: The predicted target value. *(since 1.1.0)*
+- `func predict(_ value: Double) -> Double` — Predicts a single target value from one single-feature sample. Returns: The predicted target value. *(since 1.1.0; this exact signature since 1.4.0)*
 
 ## LinearRegression
 
@@ -96,7 +96,7 @@ Conforms to: Equatable, Error.
 
 ## ResidualModel
 
-`struct ResidualModel<Model> where Model : Regressor, Model : Decodable, Model : Encodable, Model : Equatable, Model : Sendable` — Pairs a fitted regression model with the residuals it leaves behind. *(since 1.4.0)*
+`struct ResidualModel<Model> where Model : Regressor, Model : Decodable, Model : Encodable, Model : Equatable, Model : Sendable` — Pairs a fitted regression model with the residuals it leaves behind. Note: Unlike a feature scaler, computing a residual needs both the features and the observed targets — there is no `observed − predicted` without the observed value. So `residuals(features:targets:)` takes both, rather than the unary `transform(_:)` a scaler exposes. *(since 1.4.0)*
 
 Conforms to: Codable, Equatable.
 
@@ -105,6 +105,9 @@ Conforms to: Codable, Equatable.
 - `func expected(_ features: [[Double]]) -> [Double]` — The expected values the wrapped model predicts for the given features. Returns: One predicted value per sample. *(since 1.4.0)*
 - `func residuals(features: [[Double]], targets: [Double]) -> [Double]` — The residuals `observed − predicted`, one per sample. Returns: One residual per sample, `targets[i] − predicted[i]`. *(since 1.4.0)*
 - `func residual(features: [Double], observed: Double) -> Double` — The residual for a single observed value at one sample. Returns: `observed − predicted` for the single sample. *(since 1.4.0)*
+
+## ResidualModel where Model: Coefficients
+
 - `var coefficients: [Double] { get }` *(since 1.4.0)*
 
 ## Coefficients
@@ -113,7 +116,7 @@ Conforms to: Codable, Equatable.
 
 - `var coefficients: [Double] { get }` — The model's learned numbers: the base value (intercept) first, then one weight per input, in the order the inputs were given. *(since 1.4.0)*
 - `func equation() -> String` — Renders the fit as a readable equation, such as `y = 38000.00 + 110.00x`. Returns: The fitted formula as a string. An empty coefficient vector renders as `y = 0`. *(since 1.5.0)*
-- `func equation(variables: [String], response: String = "y") -> String` — Renders the fit as a readable equation with each variable named, such as `price = 38000.00 + 110.00·sqft`. Returns: The fitted formula as a string. An empty coefficient vector renders as `response = 0`. *(since 1.6.0)*
+- `func equation(variables: [String], response: String = "y") -> String` — Renders the fit as a readable equation with each variable named, such as `price = 38000.00 + 110.00·sqft`. Returns: The fitted formula as a string. An empty coefficient vector renders as `response = 0`. Precondition: `variables` holds exactly one name per weight, which is `coefficients.count - 1`. *(since 1.6.0)*
 
 ## ConfidenceInterval
 

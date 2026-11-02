@@ -60,11 +60,11 @@ struct Topic {
 
 // Source files are matched by base name. A public symbol in a file not listed here stops the script.
 let topics: [Topic] = [
-    Topic(file: "statistics", title: "Statistics", summary: "descriptive statistics, quartiles, skewness, empirical rule, frequency tables",
+    Topic(file: "statistics", title: "Statistics", summary: "descriptive statistics, the `Quartiles` type, skewness, empirical rule, frequency tables",
           sources: ["ArrayStatistics", "Quartiles", "ColumnSummary", "SkewnessReport", "SkewnessAgreement", "EmpiricalRule", "Frequency"]),
     Topic(file: "sampling", title: "Sampling and splitting", summary: "train/test split, k-fold, resampling, bootstrap, sampling distributions",
           sources: ["ArraySampling"]),
-    Topic(file: "charts", title: "Chart helpers", summary: "data shaping for Swift Charts: histograms, bins, aggregation, cumulative and stacked series",
+    Topic(file: "charts", title: "Chart helpers", summary: "data shaping for Swift Charts: `quartiles()`, histograms, bins, aggregation, cumulative and stacked series",
           sources: ["ArrayCharts", "AggregationMethod", "BinRule"]),
     Topic(file: "data", title: "Tabular data", summary: "`Panel`, panel summaries, contingency tables",
           sources: ["Panel", "PanelSummary", "ContingencyTable"]),
@@ -150,6 +150,10 @@ struct API {
     let file: String?
     let line: Int
     var conformances: [String] = []
+    /// The symbol's generic constraints, one requirement per entry, such as `Model: Classifier`.
+    var genericConstraints: [String] = []
+    /// The extension's constraints, one requirement per entry; empty outside an extension.
+    var constraintParts: [String] = []
 
     /// Identity across releases: owner, name, and extension constraint.
     var key: String { "\(owner)|\(title)|\(constraint)" }
@@ -159,12 +163,14 @@ struct API {
 
 /// Describes an extension's generic constraints in the form a reader writes them, such as `[Double]`.
 func constraintText(_ constraints: [Symbol.Constraint]?) -> String {
-    guard let constraints, !constraints.isEmpty else { return "" }
-    let parts = constraints.map { c -> String in
-        if c.lhs == "Element", c.kind == "sameType" { return "Element == \(c.rhs)" }
-        return c.kind == "sameType" ? "\(c.lhs) == \(c.rhs)" : "\(c.lhs): \(c.rhs)"
-    }
-    return parts.sorted().joined(separator: ", ")
+    constraintList(constraints).joined(separator: ", ")
+}
+
+/// Returns each generic requirement in reader form, sorted, such as `Model == KMeans`.
+func constraintList(_ constraints: [Symbol.Constraint]?) -> [String] {
+    (constraints ?? []).map { c in
+        c.kind == "sameType" ? "\(c.lhs) == \(c.rhs)" : "\(c.lhs): \(c.rhs)"
+    }.sorted()
 }
 
 /// Loads both symbol graph files for one release and flattens them into APIs.
@@ -195,7 +201,9 @@ func loadAPIs(_ directory: URL) -> [API] {
                             declaration: declaration, constraint: symbol.swiftExtension == nil ? "" : constraint,
                             doc: symbol.docComment?.lines.map(\.text) ?? [], file: file,
                             line: symbol.location?.position.line ?? 0,
-                            conformances: found.filter { shownConformances.contains($0) }.sorted()))
+                            conformances: found.filter { shownConformances.contains($0) }.sorted(),
+                            genericConstraints: constraintList(symbol.swiftGenerics?.constraints),
+                            constraintParts: symbol.swiftExtension == nil ? [] : constraintList(symbol.swiftExtension?.constraints)))
         }
     }
     return apis
@@ -264,32 +272,73 @@ func plainLinks(_ text: String) -> String {
     return result
 }
 
-/// Returns a doc comment's first paragraph plus its Returns and Throws notes.
+// Doc comment callouts kept in a summary. Precondition, Warning, Important, and Note carry the
+// trapping and numerical-safety rules a caller must follow, so they are never dropped.
+let summaryLabels = ["Returns", "Throws", "Precondition", "Important", "Warning", "Note"]
+
+/// Returns a doc comment's first paragraph plus its Returns, Throws, and safety callouts.
 func summary(_ lines: [String]) -> String {
     var paragraph: [String] = []
     for line in lines {
         let trimmed = line.trimmingCharacters(in: .whitespaces)
         if trimmed.isEmpty { if paragraph.isEmpty { continue } else { break } }
-        if trimmed.hasPrefix("- ") || trimmed.hasPrefix("```") { break }
+        if trimmed.hasPrefix("- ") || trimmed.hasPrefix("> ") || trimmed.hasPrefix("```") { break }
         paragraph.append(trimmed)
     }
     var parts = [paragraph.joined(separator: " ")]
-    for label in ["Returns", "Throws"] {
-        var note: [String] = []
-        var capturing = false
-        for line in lines {
-            let trimmed = line.trimmingCharacters(in: .whitespaces)
-            if trimmed.hasPrefix("- \(label):") {
-                capturing = true
-                note.append(String(trimmed.dropFirst(label.count + 3)).trimmingCharacters(in: .whitespaces))
-            } else if capturing {
-                if trimmed.isEmpty || trimmed.hasPrefix("- ") { break }
-                note.append(trimmed)
+    for label in summaryLabels {
+        // Each occurrence of the label, in either `- Label:` field form or `> Label:` aside form.
+        for marker in ["- \(label):", "> \(label):"] {
+            var note: [String] = []
+            var capturing = false
+            for line in lines {
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                if trimmed.hasPrefix(marker) {
+                    if !note.isEmpty { parts.append("\(label): \(note.joined(separator: " "))"); note = [] }
+                    capturing = true
+                    note.append(String(trimmed.dropFirst(marker.count)).trimmingCharacters(in: .whitespaces))
+                } else if capturing {
+                    if trimmed.isEmpty || trimmed.hasPrefix("- ") || trimmed.hasPrefix("```") { capturing = false; continue }
+                    let continuation = trimmed.hasPrefix(">") ? String(trimmed.dropFirst()).trimmingCharacters(in: .whitespaces) : trimmed
+                    if marker.hasPrefix(">") && !trimmed.hasPrefix(">") { capturing = false; continue }
+                    note.append(continuation)
+                }
             }
+            if !note.isEmpty { parts.append("\(label): \(note.joined(separator: " "))") }
         }
-        if !note.isEmpty { parts.append("\(label): \(note.joined(separator: " "))") }
     }
     return plainLinks(parts.filter { !$0.isEmpty }.joined(separator: " "))
+}
+
+// Corrections to Quiver doc comments that are wrong in a released tag, keyed by API key.
+// Each entry replaces exact text in the generated summary. The script stops when the text is
+// not found, which means Quiver's docs changed: fix or remove the entry then. Remove an entry
+// once the corrected wording ships in a Quiver release.
+let docCorrections: [String: [(find: String, replace: String)]] = [
+    "EigenDecomposition|converged|": [(
+        "An unconverged result is still a valid decomposition — the iterates remain exactly orthogonal-similar to the input — but its off-diagonal residual is larger than the tolerance guarantees.",
+        "An unconverged result is an approximation, not a finished eigendecomposition: the iterates remain orthogonal-similar to the input, but the off-diagonal residual exceeds the tolerance. Check `converged` before trusting the eigenvalues and eigenvectors."
+    )],
+    "GaussianNaiveBayes|predictProbabilities(_:)|": [(
+        "Returns calibrated class probabilities for each sample.",
+        "Returns normalized posterior class probability estimates for each sample. Normalization does not make the values calibrated; Naive Bayes is often overconfident."
+    )],
+    "Array|rSquared(actual:)|Element == Double": [(
+        "R² as a value between 0 and 1 (can be negative for very poor models).",
+        "R², at most 1. It is negative when the model fits worse than predicting the mean, and it has no lower bound."
+    )],
+]
+
+/// Returns an API's summary with any doc correction applied.
+func note(for api: API) -> String {
+    var text = summary(api.doc)
+    for correction in docCorrections[api.key] ?? [] {
+        guard text.contains(correction.find) else {
+            fail("doc correction for \(api.key) no longer matches Quiver's docs; update or remove it")
+        }
+        text = text.replacingOccurrences(of: correction.find, with: correction.replace)
+    }
+    return text
 }
 
 // MARK: - Version helpers
@@ -317,6 +366,24 @@ for release in releases {
 }
 
 let current = releases.last!.apis
+
+// The first release of the unbroken run, ending at the newest release, in which each member's
+// exact declaration exists under its key. A member whose return type, labels, or default
+// arguments changed after its name first appeared is tagged with this release, not the name's.
+// Overloads share a key, so each release keeps the set of declarations per key.
+let declarationsByKey = releases.map { release in
+    Dictionary(grouping: release.apis, by: \.key).mapValues { Set($0.map(\.declaration)) }
+}
+var signatureSince: [String: String] = [:]
+for api in current where !api.isType {
+    var earliest = releases.count - 1
+    while earliest > 0, declarationsByKey[earliest - 1][api.key]?.contains(api.declaration) == true { earliest -= 1 }
+    signatureSince[api.key + "|" + api.declaration] = releases[earliest].tag
+}
+
+// Each type's own generic constraints, so member headings show only the constraints their extension adds.
+let typeConstraints = Dictionary(current.filter(\.isType).map { ($0.display, Set($0.genericConstraints)) }, uniquingKeysWith: { a, _ in a })
+
 let sourceToTopic = Dictionary(uniqueKeysWithValues: topics.flatMap { t in t.sources.map { ($0, t.file) } })
 
 // Types keep their own file; members without a location fall back to their owner's file.
@@ -336,9 +403,16 @@ if !unmapped.isEmpty {
 /// Renders one API as a bullet: declaration, summary, and since tag.
 func bullet(_ api: API) -> String {
     var text = "- `\(api.declaration)`"
-    let note = summary(api.doc)
-    if !note.isEmpty { text += " — \(note)" }
-    if let version = since[api.key], version != first { text += " *(since \(version))*" }
+    let description = note(for: api)
+    if !description.isEmpty { text += " — \(description)" }
+    let nameSince = since[api.key] ?? first
+    let declarationSince = signatureSince[api.key + "|" + api.declaration] ?? nameSince
+    if declarationSince != nameSince {
+        let origin = nameSince == first ? "" : "since \(nameSince); "
+        text += " *(\(origin)this exact signature since \(declarationSince))*"
+    } else if nameSince != first {
+        text += " *(since \(nameSince))*"
+    }
     return text
 }
 
@@ -357,13 +431,14 @@ func render(_ topic: Topic, _ apis: [API]) -> String {
         var intro = ""
         if api.isType {
             heading = api.display
-            intro = "`\(api.declaration)` — \(summary(api.doc))"
+            intro = "`\(api.declaration)` — \(note(for: api))"
             if let version = since[api.key], version != first { intro += " *(since \(version))*" }
             if !api.conformances.isEmpty { intro += "\n\nConforms to: " + api.conformances.joined(separator: ", ") + "." }
         } else if ["Array", "Sequence", "Collection", "String", "Dictionary", "Double", "Int", "Float", "BinaryFloatingPoint", "FloatingPoint", "Numeric"].contains(api.owner) {
             heading = api.constraint.isEmpty ? "\(api.owner) extensions" : "\(api.owner) extensions where \(api.constraint)"
         } else {
-            heading = api.owner
+            let added = api.constraintParts.filter { !(typeConstraints[api.owner] ?? []).contains($0) }
+            heading = added.isEmpty ? api.owner : "\(api.owner) where \(added.joined(separator: ", "))"
         }
         if let position = index[heading] {
             if api.isType { groups[position].intro = intro } else { groups[position].items.append(bullet(api)) }
@@ -411,7 +486,7 @@ func changeSections(_ notes: String) -> String {
         }
         if line.hasPrefix("#") {
             let heading = line.drop { $0 == "#" }.trimmingCharacters(in: .whitespaces)
-            let wanted = heading.range(of: #"^(Breaking|Changed?\b|Upgrade notes)"#, options: .regularExpression) != nil
+            let wanted = heading.range(of: #"^(Breaking|Changed?\b|Fixed|Upgrade notes)"#, options: .regularExpression) != nil
             let docsOnly = heading.range(of: #"(?i)docc|catalog|documentation"#, options: .regularExpression) != nil
             capturing = wanted && !docsOnly
             if capturing { out.append("### \(heading)") }

@@ -66,6 +66,10 @@ Compatibility: One breaking rename in descriptive statistics: `std()` → `stand
 
 If you previously did `print(arr.summary())` the output is unchanged. If you previously parsed the string, switch to the typed fields.
 
+### Fixed
+
+- Internal numerical stability improvements in the t-distribution and chi-squared CDF implementations.
+
 ### Upgrade notes
 
 If you are upgrading from 1.1.0, the two call-site changes most likely to bite are:
@@ -102,6 +106,12 @@ Signature changed:
 
 Compatibility: Patch release. No API or behavior changes.
 
+### Fixed
+
+- **Type-checker timeout in `Distributions` on Swift 6.3.** Multi-term Foundation arithmetic in the t-distribution and chi-squared CDF implementations was split into intermediate constants so the Swift 6.3 type-checker can resolve the expressions within its time budget. Numerical results are identical to 1.2.0.
+
+No other changes ship in 1.2.1. If your toolchain compiled 1.2.0 cleanly there is no urgency to upgrade; if you are on Swift 6.3 and saw a "compiler is unable to type-check this expression in reasonable time" error in `Distributions.swift`, 1.2.1 resolves it.
+
 ## 1.2.5
 
 ### Breaking
@@ -135,6 +145,13 @@ The release notes list no breaking or behavior changes.
 ### Change — Deterministic nearest-neighbor tie-breaking
 
 Classification ties in `KNearestNeighbors` now resolve deterministically to the label of the nearest neighbor rather than relying on non-deterministic dictionary iteration.
+
+### Fixed
+
+- Fixed an issue where `Pipeline` and `KNearestNeighbors` models serialized under Quiver 1.5.0 failed to decode following `DistanceMetric` schema updates.
+- Fixed a precondition failure when calling `ones(_:_:)` with `Double` or `Float` scalar types.
+- Aligned zero-vector threshold checks between `scalarProjection` and `vectorProjection`.
+- Fixed `Quiver.version` reporting `"1.4.0"` instead of the current release tag.
 
 ### API diff from 1.5.0
 

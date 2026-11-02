@@ -6,10 +6,10 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 ## Array extensions where Element == [Double]
 
-- `func solve(_ b: [Double]) -> [Double]?` — Solves the linear system `A · x = b` for the unknown vector `x`. Returns: The solution vector `x`, or `nil` if `self` is not square, has rows of inconsistent length, has a row count that disagrees with `b.count`, or is singular (no unique solution). *(since 1.1.0)*
+- `func solve(_ b: [Double]) -> [Double]?` — Solves the linear system `A · x = b` for the unknown vector `x`. Returns: The solution vector `x`, or `nil` if `self` is not square, has rows of inconsistent length, has a row count that disagrees with `b.count`, or is singular (no unique solution). Note: Singular matrices return `nil`. Near-singular matrices (condition number above roughly `10¹⁰`) return a non-`nil` value that may be numerically unreliable. For ill-conditioned systems the result should be treated with care — see <doc:Determinants-Primer>. *(since 1.1.0)*
 - `func luDecomposed() throws -> LUDecomposition` — Factors a square matrix into `P · A = L · U` using partial pivoting. Returns: The `L`, `U`, and permutation factors of the matrix. Throws: `MatrixError.notSquare` if the matrix is not square or has rows of inconsistent length; `MatrixError.singular` if the matrix is singular. *(since 1.5.0)*
 - `func eigenDecomposed() throws -> EigenDecomposition` — Computes the eigenvalues and eigenvectors of a symmetric matrix. Returns: The eigenvalues (descending) and matching eigenvectors. Throws: `MatrixError.notSquare` if the matrix is empty, non-square, or has rows of inconsistent length; `MatrixError.notSymmetric` if any off-diagonal pair differs beyond the relative tolerance. *(since 1.6.0)*
-- `func covarianceMatrix(ddof: Int = 1) -> [[Double]]?` — Computes the covariance matrix of a design matrix whose rows are samples and columns are features. Returns: A p × p symmetric covariance matrix, or `nil` if the array is empty, the rows have inconsistent lengths, `ddof` is negative, or there are fewer than `ddof + 1` rows. *(since 1.6.0)*
+- `func covarianceMatrix(ddof: Int = 1) -> [[Double]]?` — Computes the covariance matrix of a design matrix whose rows are samples and columns are features. Returns: A p × p symmetric covariance matrix, or `nil` if the array is empty, the rows have inconsistent lengths, `ddof` is negative, or there are fewer than `ddof + 1` rows. Note: `correlationMatrix()` uses the opposite orientation — its rows are series, not samples. Feeding a samples-as-rows design matrix to `correlationMatrix()` produces an n × n matrix where p × p was intended. *(since 1.6.0)*
 - `func asExpression() -> String` — Returns the matrix as a string, with each cell formatted by `UnicodeMath.formatCell` and each column right-aligned to its widest entry. Returns: The matrix as a Unicode-formatted multi-line string. *(since 1.3.0)*
 - `func asFractions(maxDenominator: Int = 1000) -> [[Fraction]]` — Converts each element to its simplest fractional representation. Returns: A 2D array of `Fraction` values
 
@@ -41,7 +41,7 @@ Conforms to: Codable, Equatable.
 - `let eigenvalues: [Double]` — Eigenvalues sorted in descending order. *(since 1.6.0)*
 - `let eigenvectors: [[Double]]` — Orthonormal eigenvectors, one per row. Row `k` pairs with `eigenvalues[k]`. Each eigenvector is sign-fixed so its largest-magnitude element is positive. *(since 1.6.0)*
 - `let sweepsUsed: Int` — The number of full Jacobi sweeps the solver performed. *(since 1.6.0)*
-- `let converged: Bool` — Whether the off-diagonal norm reached the convergence tolerance within the sweep limit. An unconverged result is still a valid decomposition — the iterates remain exactly orthogonal-similar to the input — but its off-diagonal residual is larger than the tolerance guarantees. *(since 1.6.0)*
+- `let converged: Bool` — Whether the off-diagonal norm reached the convergence tolerance within the sweep limit. An unconverged result is an approximation, not a finished eigendecomposition: the iterates remain orthogonal-similar to the input, but the off-diagonal residual exceeds the tolerance. Check `converged` before trusting the eigenvalues and eigenvectors. *(since 1.6.0)*
 
 ## MatrixError
 
