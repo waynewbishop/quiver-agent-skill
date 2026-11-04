@@ -14,7 +14,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 `struct Pipeline<Model> where Model : Decodable, Model : Encodable, Model : Equatable, Model : Sendable` — A matched pair of scaler and model that travel together. *(since 1.1.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let scaler: StandardScaler` — The scaler that normalizes raw inputs before prediction. *(since 1.1.0)*
 - `let reducer: PCA?` — The optional dimensionality-reduction stage applied after scaling. *(since 1.6.0)*
@@ -58,7 +58,7 @@ Conforms to: Codable, Equatable.
 
 `struct StandardScaler` — A column-wise z-score scaler for feature matrices. *(since 1.1.0)*
 
-Conforms to: Codable, Equatable, Transformer.
+Conforms to: Codable, CustomStringConvertible, Equatable, Transformer.
 
 - `let means: [Double]` — Per-column mean values learned from the training data. *(since 1.1.0)*
 - `let stds: [Double]` — Per-column standard deviation values learned from the training data. *(since 1.1.0)*
@@ -70,7 +70,7 @@ Conforms to: Codable, Equatable, Transformer.
 
 `struct FeatureScaler` — A column-wise min-max scaler for feature matrices.
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let minimums: [Double]` — Per-column minimum values learned from the training data.
 - `let maximums: [Double]` — Per-column maximum values learned from the training data.
@@ -83,7 +83,7 @@ Conforms to: Codable, Equatable.
 
 `struct KMeans` — A trained K-Means clustering model.
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let centroids: [[Double]]` — The final centroid positions after convergence.
 - `let labels: [Int]` — The cluster label assigned to each training sample (0 to k-1).
@@ -100,7 +100,7 @@ Conforms to: Codable, Equatable.
 
 `struct Cluster` — A single cluster from a K-Means model, containing a centroid and its assigned data points.
 
-Conforms to: Codable, Equatable, Sequence.
+Conforms to: Codable, CustomStringConvertible, Equatable, Sequence.
 
 - `let centroid: [Double]` — The centroid position for this cluster.
 - `let points: [[Double]]` — The data points assigned to this cluster.
@@ -111,7 +111,7 @@ Conforms to: Codable, Equatable, Sequence.
 
 `struct PCA` — A dimensionality-reduction transformer that projects features onto the directions of largest variance. *(since 1.6.0)*
 
-Conforms to: Codable, Equatable, Transformer.
+Conforms to: Codable, CustomStringConvertible, Equatable, Transformer.
 
 - `let components: [[Double]]` — The principal components, one per row — a (componentCount × featureCount) matrix. With three input features and two components requested, `components` has two rows of three values, and `components[0]` is the direction of largest variance. Each row is a unit vector, sign-fixed so its largest-magnitude element is positive. *(since 1.6.0)*
 - `let means: [Double]` — Per-feature mean values learned from the training data. *(since 1.6.0)*

@@ -26,7 +26,7 @@ Conforms to: Codable, Equatable, Hashable.
 
 `struct LogisticRegression` — A binary classifier trained by gradient descent on cross-entropy loss. *(since 1.4.0)*
 
-Conforms to: Classifier, Codable, Equatable.
+Conforms to: Classifier, Codable, CustomStringConvertible, Equatable.
 
 - `let coefficients: [Double]` — The fitted coefficient vector. *(since 1.4.0)*
 - `let featureCount: Int` — Number of features the model was trained on. Does not count the intercept term. *(since 1.4.0)*
@@ -47,7 +47,7 @@ Conforms to: Classifier, Codable, Equatable.
 
 `struct KNearestNeighbors` — A trained K-Nearest Neighbors classifier.
 
-Conforms to: Classifier, Codable, Equatable.
+Conforms to: Classifier, Codable, CustomStringConvertible, Equatable.
 
 - `let trainingFeatures: [[Double]]` — The training feature vectors, stored for distance computation at prediction time.
 - `let trainingLabels: [Int]` — The training labels, one per feature vector.
@@ -84,7 +84,7 @@ Conforms to: Codable, Equatable.
 
 `struct GaussianNaiveBayes` — A trained Gaussian Naive Bayes classifier.
 
-Conforms to: Classifier, Codable, Equatable.
+Conforms to: Classifier, Codable, CustomStringConvertible, Equatable.
 
 - `let classes: [ClassStats]` — The learned statistics for each class, one entry per unique label.
 - `let featureCount: Int` — Number of features the model was trained on.
@@ -97,7 +97,7 @@ Conforms to: Classifier, Codable, Equatable.
 
 `struct ClassStats` — Statistics learned from the training data for a single class.
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let label: Int` — The class label this entry represents.
 - `let prior: Double` — Prior probability P(class), computed as count / totalSamples.
@@ -109,7 +109,7 @@ Conforms to: Codable, Equatable.
 
 `struct Classification` — A group of data points sharing the same predicted class label.
 
-Conforms to: Codable, Equatable, Sequence.
+Conforms to: Codable, CustomStringConvertible, Equatable, Sequence.
 
 - `let label: Int` — The predicted class label for this group.
 - `let points: [[Double]]` — The input data points assigned to this class.
@@ -137,7 +137,7 @@ Conforms to: Codable, Equatable, Sequence.
 
 `struct ConfusionMatrix` — Captures the four outcomes of a binary classifier — true positives, false positives, true negatives, and false negatives — and derives standard evaluation metrics from them.
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let truePositives: Int` — Positive samples the model correctly identified as positive.
 - `let falsePositives: Int` — Negative samples the model incorrectly identified as positive.
@@ -152,7 +152,7 @@ Conforms to: Codable, Equatable.
 
 `struct ClassMetrics` — Per-class metrics for a single class label in a classification report. *(since 1.2.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let label: Int` — The class label this row describes. For aggregate rows (macro/weighted average), this is set to the sentinel `-1` and callers should consult the aggregate accessors on `ClassificationReport` rather than reading `label`. *(since 1.2.0)*
 - `let precision: Double?` — Precision for this class (TP / (TP + FP)). `nil` when the model made no positive predictions for this class. *(since 1.2.0)*
@@ -165,7 +165,7 @@ Conforms to: Codable, Equatable.
 
 `struct ClassificationReport` — A frozen snapshot of a multi-class classification's evaluation metrics. *(since 1.2.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let perClass: [Int : ClassMetrics]` — Per-class metrics keyed by class label. *(since 1.2.0)*
 - `let classOrder: [Int]` — Class labels in sorted ascending order — the canonical iteration order. *(since 1.2.0)*

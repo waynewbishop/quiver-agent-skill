@@ -53,7 +53,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 `struct Quartiles<T> where T : BinaryFloatingPoint, T : Sendable` — The five-number summary plus the interquartile range for a sorted dataset. *(since 1.2.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let min: T` — The smallest value in the dataset. *(since 1.2.0)*
 - `let q1: T` — The 25th percentile — the value below which a quarter of the data falls. *(since 1.2.0)*
@@ -67,7 +67,7 @@ Conforms to: Codable, Equatable.
 
 `struct ColumnSummary` — A frozen snapshot of descriptive statistics for a single numerical column. *(since 1.2.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let count: Int` — The number of values in the source column. *(since 1.2.0)*
 - `let mean: Double` — The arithmetic mean. *(since 1.2.0)*
@@ -86,7 +86,7 @@ Conforms to: Codable, Equatable.
 
 `struct SkewnessReport` — A two-measure skewness diagnostic: the moment coefficient, the robust Bowley coefficient, and whether the two agree. *(since 1.3.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let count: Int` — The number of elements summarized. *(since 1.3.0)*
 - `let moment: Double` — The adjusted Fisher-Pearson moment coefficient (sample convention). Unbounded; sensitive to outliers. Positive means a long tail toward high values, negative toward low values. *(since 1.3.0)*
@@ -112,7 +112,7 @@ Conforms to: Codable, Equatable, Hashable.
 
 `struct EmpiricalRule` — Observed and expected fractions for the empirical (68-95-99.7) rule. *(since 1.2.5)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let count: Int` — The number of elements summarized. *(since 1.2.5)*
 - `let within1Sigma: Double` — The observed fraction of values within one standard deviation of the mean. *(since 1.2.5)*

@@ -110,8 +110,8 @@ struct SymbolGraph: Decodable {
     let relationships: [Relationship]?
 }
 
-// Conformances worth showing a reader; the rest (Sendable, CustomStringConvertible, …) add noise.
-let shownConformances: Set<String> = ["Codable", "Equatable", "Hashable", "Comparable", "Sequence", "Collection", "CaseIterable", "Error",
+// Conformances worth showing a reader; the rest (Sendable, …) add noise. CustomStringConvertible stays so callers know print(value) is readable.
+let shownConformances: Set<String> = ["Codable", "CustomStringConvertible", "Equatable", "Hashable", "Comparable", "Sequence", "Collection", "CaseIterable", "Error",
                                      "Regressor", "Classifier", "Transformer", "Chunker", "Embedder", "RandomNumberGenerator"]
 
 struct Symbol: Decodable {

@@ -49,7 +49,8 @@ Before writing code, look up every Quiver API you use in the matching `reference
 The rules most often broken (full list with explanations in `conventions.md`):
 
 - `[Double] + [Double]` concatenates. Use `a.add(b)`, `a.subtract(b)`, `a.multiply(b)`, `a.divide(b)` for element-wise math, and `multiplyMatrix(_:)` for a matrix product.
-- Statistics that can be undefined return optionals (`mean()`, `standardDeviation()`, `quartiles()`, `correlation(with:)`, `argMax()`, …). Unwrap with `if let` or `guard let`.
+- Statistics that can be undefined return optionals (`mean()`, `standardDeviation()`, `quartiles()`, `correlation(with:)`, `argMax()`, …). Unwrap with `if let`, or with `guard let` only inside a function. `summary()` returns `nil` for fewer than two values; use `mean()` for a single value.
+- Write examples as top-level script code (`main.swift`, playground, notebook cell), where `return` does not compile. Use `if let` and `if`/`else`, not `guard ... else { return }`, unless the user's code is inside a function.
 - Fits that solve or iterate throw (`LinearRegression`, `Ridge`, `GradientDescent`, `LogisticRegression`, and their `Pipeline` overloads). `KMeans`, `KNearestNeighbors`, `GaussianNaiveBayes`, `PCA`, and the scalers do not.
 - Classifiers take `labels: [Int]`; regressors take `targets: [Double]`; `KMeans` takes `data:`.
 - Standardize inputs to the iterative models: fit `GradientDescent` and `LogisticRegression` through `Pipeline`, and standardize `Ridge` features with a `StandardScaler`. Check `outcome` for `.converged` on all three.

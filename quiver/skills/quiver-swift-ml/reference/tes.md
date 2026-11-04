@@ -8,7 +8,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 `struct TrueEffortScore` — `TrueEffortScore` models a runner's effort using three components: a `Ridge` baseline to predict heart rate from workload, a `ResidualModel` to measure the gap, and a `Pipeline<KNearestNeighbors>` to classify effort. It tracks session history, scores runs in real time, and updates the baseline as new data is collected. *(since 1.6.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `var classifier: Pipeline<KNearestNeighbors> { get }` — The effort classifier, seeded from the population anchors and any personal labeled samples. Frozen after seeding, since re-fitting it on its own predictions would be self-training. *(since 1.6.0)*
 - `var baseline: TESBaseline? { get }` — The personal expected-heart-rate baseline, derived from `history`. nil at cold start; read its `equation()`, `coefficients`, and `conditioning` once present. *(since 1.6.0)*
@@ -43,7 +43,7 @@ Conforms to: Codable, Equatable.
 
 `enum TESError` — What the seeding initializer can surface, as one catchable type, so a watch app can handle a failed seed without trapping. The empty init and the live loop do not throw, and decoding a saved model restores its baseline as stored without refitting, so a `TESError` comes only from seeding with existing runs. `.baselineDiverged` nests the underlying `GradientDescentError` whole, preserving its typed payload and description. *(since 1.6.0)*
 
-Conforms to: Equatable, Error.
+Conforms to: CustomStringConvertible, Equatable, Error.
 
 - `case insufficientLabeledSamples(k: Int, available: Int)` — The seeding init was asked for more neighbors than it has labeled examples. The empty init preconditions `k <= anchorSamples.count` instead. *(since 1.6.0)*
 - `case baselineDiverged(GradientDescentError)` — The Ridge baseline diverged while fitting, preserved whole. *(since 1.6.0)*

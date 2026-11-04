@@ -8,7 +8,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 `struct TESResult` — The breakdown of one finalized run. `adjusted` is the headline, but it never stands alone: `meanResidual` and the three session terms ride along as siblings, so a score driven by genuine hard work stays distinguishable from one driven by heat or altitude decoupling. There is deliberately no `score()` accessor that hides them. *(since 1.6.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let adjusted: Double` *(since 1.6.0)*
 - `let raw: Double` *(since 1.6.0)*
@@ -29,7 +29,7 @@ Conforms to: Codable, Equatable.
 
 `struct TESBaseline` — The personal trained sub-models and readable diagnostics. Produced by `TrueEffortScore.finalize()` and replaced by each refit. The classifier lives on `TrueEffortScore.classifier`. If `baseline == nil`, the expected-heart-rate model is uncalibrated. *(since 1.6.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let lambda: Double` — The ridge penalty strength the baseline was fit with. *(since 1.6.0)*
 - `let scaler: StandardScaler` — The scaler that standardizes each moment's features before the Ridge reads them. *(since 1.6.0)*
@@ -59,7 +59,7 @@ Conforms to: CaseIterable, Codable, Equatable, Hashable.
 
 `struct EffortSignals` — The standardized signals for one moment — each value is the z-score of that signal against the classifier's training distribution, so a reading near 0 is typical and a large magnitude is an outlier. This is how a UI reads *why* a moment is unusual: on a steep downhill, `grade` is a large negative outlier while `heartRate` stays near 0, which is the calm-heart, hard-legs signature the raw numbers hide. *(since 1.6.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let heartRate: Double` — Heart rate, in standard deviations from the training mean. *(since 1.6.0)*
 - `let pace: Double` — Pace, in standard deviations from the training mean. *(since 1.6.0)*

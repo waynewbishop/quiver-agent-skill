@@ -65,7 +65,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 `struct BayesPrior` — A labeled prior distribution over a set of mutually exclusive hypotheses. *(since 1.2.5)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let hypotheses: [String]` — The hypothesis labels, in the same order as `probabilities`. *(since 1.2.5)*
 - `let probabilities: [Double]` — The prior probability of each hypothesis. Sums to `1.0 ± 1e-9`. *(since 1.2.5)*
@@ -77,7 +77,7 @@ Conforms to: Codable, Equatable.
 
 `struct BayesLikelihood` — The likelihood P(E | H_i) for each hypothesis under consideration. *(since 1.2.5)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let perHypothesis: [Double]` — The likelihood P(E | H_i) for each hypothesis, in matching order. *(since 1.2.5)*
 - `init?(_ values: [Double])` — Creates a likelihood vector, validating that every entry is in `[0, 1]`. *(since 1.2.5)*
@@ -88,7 +88,7 @@ Conforms to: Codable, Equatable.
 
 `struct BayesPosterior` — A labeled posterior distribution returned from multi-hypothesis Bayes. *(since 1.2.5)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let hypotheses: [String]` — The hypothesis labels, in the same order as `probabilities`. *(since 1.2.5)*
 - `let probabilities: [Double]` — The posterior probability of each hypothesis. Sums to `1.0`. *(since 1.2.5)*

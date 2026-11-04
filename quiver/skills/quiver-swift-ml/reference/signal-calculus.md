@@ -25,7 +25,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 `struct PowerSpectrum` — A one-sided power spectral density estimate, returned by `powerSpectralDensity(sampleRate:windowed:)`. *(since 1.2.5)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let sampleRate: Double` — The sample rate of the source signal, in samples per second. *(since 1.2.5)*
 - `let frequencies: [Double]` — The frequency in hertz for each density bin. Length is `paddedLength / 2 + 1`, where `paddedLength` is the next power of two at or above the input length. Values are evenly spaced from 0 to `sampleRate / 2` inclusive. *(since 1.2.5)*

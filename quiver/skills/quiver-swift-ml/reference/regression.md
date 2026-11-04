@@ -15,7 +15,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 `struct LinearRegression` — A trained ordinary least squares regression model.
 
-Conforms to: Codable, Equatable, Regressor.
+Conforms to: Codable, CustomStringConvertible, Equatable, Regressor.
 
 - `let coefficients: [Double]` — The fitted coefficient vector.
 - `let featureCount: Int` — Number of features the model was trained on.
@@ -40,7 +40,7 @@ Conforms to: Codable, Equatable, Hashable.
 
 `struct Ridge` — A regression model trained with an L2 (ridge) penalty on its coefficients. *(since 1.3.0)*
 
-Conforms to: Codable, Equatable, Regressor.
+Conforms to: Codable, CustomStringConvertible, Equatable, Regressor.
 
 - `let coefficients: [Double]` — The fitted coefficient vector. *(since 1.3.0)*
 - `let featureCount: Int` — Number of features the model was trained on. Does not count the intercept term. *(since 1.3.0)*
@@ -70,7 +70,7 @@ Conforms to: Codable, Equatable, Hashable.
 
 `struct GradientDescent` — A regression model trained by batch gradient descent, and the shared optimizer behind every iterative model in Quiver. *(since 1.3.0)*
 
-Conforms to: Codable, Equatable, Regressor.
+Conforms to: Codable, CustomStringConvertible, Equatable, Regressor.
 
 - `let coefficients: [Double]` — The fitted coefficient vector. *(since 1.3.0)*
 - `let featureCount: Int` — Number of features the model was trained on. Does not count the intercept term. *(since 1.3.0)*
@@ -89,7 +89,7 @@ Conforms to: Codable, Equatable, Regressor.
 
 `enum GradientDescentError` — Errors thrown by `GradientDescent` when the optimizer cannot return a trustworthy result. *(since 1.3.0)*
 
-Conforms to: Equatable, Error.
+Conforms to: CustomStringConvertible, Equatable, Error.
 
 - `case divergedNonFinite(iteration: Int, loss: Double)` — The iterate produced a non-finite loss (`NaN` or `±∞`) at the given iteration. Typically caused by a learning rate that is too large for the feature scale — the parameters overshoot, the predictions blow up, and the squared residuals overflow. *(since 1.3.0)*
 - `case divergedIncreasing(iteration: Int, previousLoss: Double, currentLoss: Double)` — The loss strictly increased between two consecutive iterations by more than one tolerance unit. The descent step overshot the minimum without yet producing non-finite values. Recovering would require a smaller learning rate or scaled features. *(since 1.3.0)*
@@ -98,7 +98,7 @@ Conforms to: Equatable, Error.
 
 `struct ResidualModel<Model> where Model : Regressor, Model : Decodable, Model : Encodable, Model : Equatable, Model : Sendable` — Pairs a fitted regression model with the residuals it leaves behind. Note: Unlike a feature scaler, computing a residual needs both the features and the observed targets — there is no `observed − predicted` without the observed value. So `residuals(features:targets:)` takes both, rather than the unary `transform(_:)` a scaler exposes. *(since 1.4.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let model: Model` — The fitted regression model whose predictions define the expectation. *(since 1.4.0)*
 - `init(model: Model)` — Wraps an already-fitted regressor. *(since 1.4.0)*
@@ -132,7 +132,7 @@ Conforms to: Codable, Equatable.
 
 `struct RegressionSummary` — A frozen snapshot of inference statistics for a fitted `LinearRegression`. *(since 1.2.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let coefficients: [Double]` — The fitted coefficient vector. When the model has an intercept the first element is the intercept; the remainder are feature weights. *(since 1.2.0)*
 - `let standardErrors: [Double]` — One standard error per coefficient. Same length and ordering as `coefficients`. *(since 1.2.0)*

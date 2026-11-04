@@ -47,7 +47,7 @@ Conforms to: Codable, Equatable.
 
 `struct RetrievedHit<Label> where Label : Decodable, Label : Encodable, Label : Equatable` — One ranked match from a retrieval: a stored payload paired with its similarity to the query. *(since 1.5.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let rank: Int` — The match's position in the ranked results, starting at one. *(since 1.5.0)*
 - `let label: Label` — The stored payload this hit refers to. *(since 1.5.0)*
@@ -57,6 +57,8 @@ Conforms to: Codable, Equatable.
 ## RetrievalResult
 
 `struct RetrievalResult<Label> where Label : Decodable, Label : Encodable, Label : Equatable` — The outcome of one retrieval: the top-k hits, plus the full score field they were drawn from and its summary statistics. *(since 1.5.0)*
+
+Conforms to: CustomStringConvertible.
 
 - `let hits: [RetrievedHit<Label>]` — The top-k matches, ranked best first. *(since 1.5.0)*
 - `let scores: [Double]` — The cosine score of every stored entry against the query, in storage order — the full field, not just the returned hits. *(since 1.5.0)*
@@ -71,7 +73,7 @@ Conforms to: Codable, Equatable.
 
 `struct EmbeddingIndex<Label> where Label : Decodable, Label : Encodable, Label : Equatable` — An on-device vector store: embed each entry once at ingest, then rank the whole corpus against a query by cosine similarity. *(since 1.5.0)*
 
-Conforms to: Sequence.
+Conforms to: CustomStringConvertible, Sequence.
 
 - `init(embedder: some Embedder)` — Creates an empty index that vectorizes text with the given embedder. *(since 1.5.0)*
 - `mutating func add(_ text: String, label: Label)` — Embeds `text` once and stores it under `label`. *(since 1.5.0)*

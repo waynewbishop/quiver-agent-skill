@@ -36,7 +36,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 `struct EigenDecomposition` — The result of a symmetric eigendecomposition. *(since 1.6.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let eigenvalues: [Double]` — Eigenvalues sorted in descending order. *(since 1.6.0)*
 - `let eigenvectors: [[Double]]` — Orthonormal eigenvectors, one per row. Row `k` pairs with `eigenvalues[k]`. Each eigenvector is sign-fixed so its largest-magnitude element is positive. *(since 1.6.0)*
@@ -47,7 +47,7 @@ Conforms to: Codable, Equatable.
 
 `enum MatrixError` — Errors thrown by matrix operations that can fail at runtime.
 
-Conforms to: Equatable, Error, Hashable.
+Conforms to: CustomStringConvertible, Equatable, Error, Hashable.
 
 - `case notSquare` — The operation requires a square matrix but received a non-square one.
 - `case singular` — The matrix is singular (determinant = 0) and cannot be inverted.
@@ -79,7 +79,7 @@ Conforms to: Equatable, Hashable.
 
 `struct Fraction` — A rational number representation for educational display of numeric results.
 
-Conforms to: Equatable.
+Conforms to: CustomStringConvertible, Equatable.
 
 - `let numerator: Int` — The numerator of the fraction
 - `let denominator: Int` — The denominator of the fraction (always positive)

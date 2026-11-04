@@ -1,5 +1,5 @@
 ---
 type: regex
-pattern: 'indexOfMinimum|interquartileRange'
+pattern: '\w\.(indexOfMinimum|interquartileRange)\b'
 match: not_contains
 ---

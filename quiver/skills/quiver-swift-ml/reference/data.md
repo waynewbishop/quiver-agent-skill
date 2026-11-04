@@ -8,7 +8,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 `struct Panel` — A Quiver type that organizes named columns of numeric data into a single container.
 
-Conforms to: Equatable.
+Conforms to: CustomStringConvertible, Equatable.
 
 - `let columnNames: [String]` — Column names in insertion order.
 - `let rowCount: Int` — Number of rows (shared across all columns).
@@ -39,7 +39,7 @@ Conforms to: Equatable.
 
 `struct PanelSummary` — A frozen snapshot of per-column descriptive statistics for a `Panel`. *(since 1.2.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let columnNames: [String]` — Column names in their original declaration order. Reading `columns` directly returns a dictionary, which has no guaranteed order; `columnNames` is the canonical iteration order. *(since 1.2.0)*
 - `let columns: [String : ColumnSummary]` — Per-column descriptive statistics, keyed by column name. *(since 1.2.0)*
@@ -51,7 +51,7 @@ Conforms to: Codable, Equatable.
 
 `struct ContingencyTable` — A labeled two-dimensional table of integer counts. *(since 1.2.5)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let rowLabels: [String]` — The label for each row, in row order. *(since 1.2.5)*
 - `let columnLabels: [String]` — The label for each column, in column order. *(since 1.2.5)*

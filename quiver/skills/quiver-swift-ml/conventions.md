@@ -15,6 +15,7 @@ Hand-written. Each rule below is a mistake that is easy to make with Quiver and 
 - Fitting a model that solves or iterates throws: `LinearRegression.fit`, `Ridge.fit`, `GradientDescent.fit`, `LogisticRegression.fit`, the `Pipeline.fit` overloads for those models, `inverted()`, and `TrueEffortScore(history:labeledSamples:labels:)`. Call these with `try` inside `do`/`catch`.
 - `KMeans.fit`, `KNearestNeighbors.fit`, `GaussianNaiveBayes.fit`, `PCA.fit`, `StandardScaler.fit`, `FeatureScaler.fit`, and their `Pipeline.fit` overloads do not throw. Do not wrap them in `try`.
 - When unsure, read the declaration in `reference/`: a `?` on the return type means unwrap, and `throws` means `try`.
+- Write examples as top-level script code unless the user's code is inside a function. Quiver code usually runs in a `main.swift`, a playground, or a notebook cell, where `return` is a compile error. Use `if let` and `if`/`else` there, not `guard ... else { return }`.
 
 ## Fitting models
 

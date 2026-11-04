@@ -8,7 +8,7 @@ Every API below exists in Quiver 1.0.0 and later unless it is tagged *(since X)*
 
 `struct Polynomial` — A polynomial in a single real variable, stored as ordered coefficients. *(since 1.1.0)*
 
-Conforms to: Codable, Equatable.
+Conforms to: Codable, CustomStringConvertible, Equatable.
 
 - `let coefficients: [Double]` — The polynomial coefficients in ascending order of power. *(since 1.1.0)*
 - `init(_ coefficients: [Double])` — Creates a polynomial from coefficients in ascending order of power. *(since 1.1.0)*
