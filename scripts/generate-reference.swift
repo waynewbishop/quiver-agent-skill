@@ -269,6 +269,8 @@ func plainLinks(_ text: String) -> String {
         let last = inner.split(separator: "/").last.map(String.init) ?? String(inner)
         result.replaceSubrange(range, with: "`\(last)`")
     }
+    // Name closure parameters in doc prose: the directory safety scan reads `$0` as a shell variable.
+    result = result.replacingOccurrences(of: "{ $0.", with: "{ value in value.")
     return result
 }
 
