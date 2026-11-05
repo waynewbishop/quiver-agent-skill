@@ -4,7 +4,7 @@
 [![Swift](https://img.shields.io/badge/Swift-5.9%2B-orange)](https://swift.org)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
 
-An agent skill that gives your AI coding assistant a verified reference of [Quiver](https://github.com/waynewbishop/quiver)'s public API — every signature, label, and deprecation across releases 1.0.0 through 1.6.0. Generated code adheres to Quiver's exact type signatures, safe optional handling, and architectural conventions from the first prompt, and reviews stay scoped to the version your project actually depends on.
+[Quiver](https://github.com/waynewbishop/quiver) is a Swift package for statistics, linear algebra, and machine learning on Apple platforms. This agent skill gives your AI coding assistant a verified reference to Quiver's public API, with every signature, argument label, and deprecation from release 1.0.0 through 1.6.0. Generated code uses Quiver's exact types, handles optionals safely, and follows its conventions from the first prompt. Reviews stay scoped to the Quiver version your project actually depends on.
 
 ## Who the Skill is for
 
