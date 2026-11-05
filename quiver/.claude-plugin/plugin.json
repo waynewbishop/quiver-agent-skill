@@ -10,6 +10,9 @@
   },
   "homepage": "https://github.com/waynewbishop/quiver-agent-skill",
   "repository": "https://github.com/waynewbishop/quiver-agent-skill",
+  "documentationUrl": "https://github.com/waynewbishop/quiver-agent-skill#readme",
+  "supportUrl": "https://github.com/waynewbishop/quiver-agent-skill/issues",
+  "privacyPolicyUrl": "https://github.com/waynewbishop/quiver-agent-skill/blob/main/PRIVACY.md",
   "license": "Apache-2.0",
   "keywords": ["swift", "quiver", "statistics", "linear-algebra", "machine-learning"]
 }
