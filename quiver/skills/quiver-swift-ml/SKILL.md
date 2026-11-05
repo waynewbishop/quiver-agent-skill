@@ -1,6 +1,6 @@
 ---
 name: quiver-swift-ml
-description: Writes and reviews Swift code that uses Quiver, the Swift library for statistics, linear algebra, and machine learning by Wayne Bishop. Use when a project imports Quiver or lists it in Package.swift, when the user asks for Quiver code, or when reviewing or upgrading Quiver code to a newer release. Do not use in Core ML, Core AI, Create ML, or MLX projects, and never add Quiver to a project unless the user asks.
+description: Writes and reviews Swift code that uses Quiver, the Swift library for statistics, linear algebra, and machine learning by Wayne Bishop. Use when a project imports Quiver or lists it in Package.swift, or when the user names Quiver, for example "write this with Quiver", "fit a Quiver model", "review my Quiver code", or "what changed in the latest Quiver release". Also use when reviewing or upgrading Quiver code to a newer release. Do not use in Core ML, Core AI, Create ML, or MLX projects, and never add Quiver to a project unless the user asks.
 license: Apache-2.0
 compatibility: Swift 5.9 or later; macOS 12, iOS 15, tvOS 15, watchOS 8, visionOS 1 or later.
 metadata:
@@ -64,6 +64,17 @@ The rules most often broken (full list with explanations in `conventions.md`):
 2. Then check the code against `conventions.md`.
 
 Report findings grouped by file. For each finding, name the rule broken and show the code before and after the fix. Report only genuine problems; do not report nitpicks or invent issues.
+
+## When the build fails
+
+Match the compiler message, fix the cause, and rebuild until there are no errors or warnings.
+
+- `value of type '[Double]' has no member '…'`: the name was guessed from NumPy or another library. Find the real name in the matching `reference/` file.
+- `value of optional type 'Double?' must be unwrapped`: the statistic returns an optional. Unwrap with `if let` (or `guard let` inside a function), never with `!`.
+- `call can throw but is not marked with 'try'`: the fit throws. Wrap it in `do`/`catch` with `try`.
+- `no calls to throwing functions occur within 'try' expression`: this fit does not throw. Remove the `try`.
+- `return invalid outside of a func`: the code is top-level script code. Replace `guard … else { return }` with `if let` or `if`/`else`.
+- No error, but a vector result is twice as long as expected: `+` concatenated two arrays. Use `a.add(b)`.
 
 ## Reference files
 

@@ -56,6 +56,21 @@ claude plugin marketplace add waynewbishop/quiver-agent-skill --scope project
 claude plugin install quiver@quiver-agent-skill --scope project
 ```
 
+#### Keeping the skill current
+
+Claude Code doesn't auto-update third-party marketplaces by default, so the skill stays on the version you installed. Each Quiver release brings a skill update with new reference files. To receive them automatically, run `/plugin`, open the **Marketplaces** tab, select `quiver-agent-skill`, and choose **Enable auto-update**.
+
+To update manually instead, refresh the marketplace and update the plugin, then restart Claude Code:
+
+```bash
+claude plugin marketplace update quiver-agent-skill
+claude plugin update quiver@quiver-agent-skill
+```
+
+### Claude.ai
+
+Download this repository as a ZIP, then compress the `quiver/skills/quiver-swift-ml` folder on its own into a new ZIP. Upload that file in **Settings > Capabilities > Skills**. Skills uploaded this way don't update on their own; upload the new folder after each release.
+
 ### Other Coding Agents (Agent Skills standard)
 
 With Cursor, Codex, or another agent supporting the open [Agent Skills](https://agentskills.io) standard, install via `npx`:
@@ -66,7 +81,7 @@ npx skills add https://github.com/waynewbishop/quiver-agent-skill --skill quiver
 
 ## Using the Skill
 
-In any repository containing a Quiver dependency, Claude loads the skill automatically when you ask for numerical or statistical code:
+Claude loads the skill automatically when a project depends on Quiver, or when you ask for Quiver code by name. In a project that uses Quiver, a plain request for statistics or machine learning code is enough:
 
 > "Fit a logistic regression model on these features and print the classification report."
 
