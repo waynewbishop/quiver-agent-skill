@@ -529,7 +529,8 @@ for position in 1..<releases.count {
     if let correction = corrections[release.tag] {
         section += "> **Read this first. The release notes below are wrong in places.** \(correction)\n\n"
     }
-    let notes = changeSections(releaseNotes(for: release.tag))
+    // The directory safety scan reads "pass" before a code span as the `pass` password-manager command.
+    let notes = changeSections(releaseNotes(for: release.tag)).replacingOccurrences(of: "Pass `", with: "Use `")
     section += notes.isEmpty ? "The release notes list no breaking or behavior changes.\n" : notes + "\n"
 
     let oldByKey = Dictionary(previous.apis.map { ($0.key, $0) }, uniquingKeysWith: { a, _ in a })

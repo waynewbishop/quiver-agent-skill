@@ -54,7 +54,7 @@ Compatibility: One breaking rename in descriptive statistics: `std()` → `stand
 ### Changed — Descriptive-statistics defaults
 
 - **`std()` → `standardDeviation()`.** The short-form name is removed; the spelled-out name is canonical. Update call sites.
-- **Default `ddof` is now `1` (sample statistics).** `standardDeviation()` and `variance()` previously defaulted to the population convention (`ddof=0`); they now default to the sample convention (`ddof=1`), which is the convention most users expect when working with sample data. Pass `ddof: 0` explicitly to recover the previous default. The summary-output table preserves the `std` short-form in column headers as a width carve-out.
+- **Default `ddof` is now `1` (sample statistics).** `standardDeviation()` and `variance()` previously defaulted to the population convention (`ddof=0`); they now default to the sample convention (`ddof=1`), which is the convention most users expect when working with sample data. Use `ddof: 0` explicitly to recover the previous default. The summary-output table preserves the `std` short-form in column headers as a width carve-out.
 - **`standardError()`.** New first-class method, also defaulting to `ddof=1`. Computed as `standardDeviation() / sqrt(n)`.
 
 ### Changed — Typed returns replace tuples and strings

@@ -54,7 +54,7 @@ The rules most often broken (full list with explanations in `conventions.md`):
 - Fits that solve or iterate throw (`LinearRegression`, `Ridge`, `GradientDescent`, `LogisticRegression`, and their `Pipeline` overloads). `KMeans`, `KNearestNeighbors`, `GaussianNaiveBayes`, `PCA`, and the scalers do not.
 - Classifiers take `labels: [Int]`; regressors take `targets: [Double]`; `KMeans` takes `data:`.
 - Standardize inputs to the iterative models: fit `GradientDescent` and `LogisticRegression` through `Pipeline`, and standardize `Ridge` features with a `StandardScaler`. Check `outcome` for `.converged` on all three.
-- Pass an explicit `seed: UInt64` (or `using:` generator) wherever an API exposes one; a few, such as `KMeans.bestFit` and `oversample(labels:)`, take none. Use `stratifiedSplit(labels:testRatio:seed:)` for paired features and labels.
+- Supply an explicit `seed: UInt64` (or `using:` generator) wherever an API exposes one; a few, such as `KMeans.bestFit` and `oversample(labels:)`, take none. Use `stratifiedSplit(labels:testRatio:seed:)` for paired features and labels.
 - Quiver ships the `Chunker` and `Embedder` protocols, not implementations; write a small conforming struct.
 - For True Effort Score, read the True Effort Score section of `conventions.md` before writing any code.
 

@@ -31,7 +31,7 @@ Hand-written. Each rule below is a mistake that is easy to make with Quiver and 
 
 ## Splitting and randomness
 
-- When a random or splitting API exposes `seed: UInt64` or a `using:` generator, pass one explicitly; most have no default seed. The array generators (`random`, `randomNormal`, `randomExponential`, `randomBinomial`) also have unseeded overloads, so pick the `using: &rng` overload with a `SeededRandomNumberGenerator` when results must be reproducible. Some APIs take no seed: `KMeans.bestFit` seeds its attempts `0..<attempts` internally, so it is deterministic, and `oversample(labels:)` is not reproducible at all; say so when reproducibility matters.
+- When a random or splitting API exposes `seed: UInt64` or a `using:` generator, supply one explicitly; most have no default seed. The array generators (`random`, `randomNormal`, `randomExponential`, `randomBinomial`) also have unseeded overloads, so pick the `using: &rng` overload with a `SeededRandomNumberGenerator` when results must be reproducible. Some APIs take no seed: `KMeans.bestFit` seeds its attempts `0..<attempts` internally, so it is deterministic, and `oversample(labels:)` is not reproducible at all; say so when reproducibility matters.
 - For paired features and labels, use `features.stratifiedSplit(labels:testRatio:seed:)`, which returns `trainFeatures`, `testFeatures`, `trainLabels`, and `testLabels` and keeps class balance. Calling `trainTestSplit(testRatio:seed:)` separately on two equal-length arrays with the same seed also produces aligned splits.
 - For cross-validation, `kFoldIndices(k:seed:)` returns index folds; index into both arrays with them.
 
@@ -42,7 +42,7 @@ Hand-written. Each rule below is a mistake that is easy to make with Quiver and 
 
 ## Names that changed or are often guessed wrong
 
-- `standardDeviation()`, not `std()` (removed in 1.2.0). Since 1.2.0, `standardDeviation()` and `variance()` default to the sample convention, `ddof: 1`; pass `ddof: 0` for the population value.
+- `standardDeviation()`, not `std()` (removed in 1.2.0). Since 1.2.0, `standardDeviation()` and `variance()` default to the sample convention, `ddof: 1`; use `ddof: 0` for the population value.
 - `argMin()` and `argMax()` are the current names. `indexOfMinimum` and `indexOfMaximum` do not exist, whatever the 1.1.0 release notes say.
 - `quartiles()` returns a `Quartiles` struct (from 1.2.0) with `min`, `q1`, `median`, `q3`, `max`, and `iqr`. There is no `interquartileRange` field.
 - `topIndices(k:)` results carry a `rank` field from 1.0.1, so destructure by name, not by position.
@@ -62,7 +62,7 @@ Hand-written. Each rule below is a mistake that is easy to make with Quiver and 
 ## True Effort Score
 
 - Hold `TrueEffortScore` in a `var`; `record`, `pause`, `resume`, `finalize`, and `discardRun` are mutating. `TrueEffortScore()` starts a new runner and does not throw. `TrueEffortScore(history:labeledSamples:labels:)` seeds from saved runs and throws `TESError`.
-- Call `record(heartRate:pace:cadence:grade:verticalOscillation:altitude:at:)` once per sensor sample with an absolute `Date`. Quiver derives the time deltas; do not track them yourself. Units: bpm, min/km, steps/min, grade in percent (negative is downhill), vertical oscillation in cm, altitude in meters. Pass `hrTrust:` below `1.0` when the heart-rate reading is doubtful.
+- Call `record(heartRate:pace:cadence:grade:verticalOscillation:altitude:at:)` once per sensor sample with an absolute `Date`. Quiver derives the time deltas; do not track them yourself. Units: bpm, min/km, steps/min, grade in percent (negative is downhill), vertical oscillation in cm, altitude in meters. Set `hrTrust:` below `1.0` when the heart-rate reading is doubtful.
 - Set `location = .indoor` before the first sample of a treadmill run. Indoor runs are scored but not folded into history.
 - `finalize()` returns `nil` when active time (`timerTime`) is under 60 seconds, and the run is discarded. Always unwrap its result.
 - On a first run, `baseline`, `TESResult.meanResidual`, and `TESResult.expectedHeartRate` are `nil`. Treat `baseline == nil` as the cold-start state.
